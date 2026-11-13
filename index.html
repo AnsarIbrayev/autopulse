@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoPulse – Used Car Market Analytics</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: #0f172a; color: #e2e8f0; }
+  header { padding: 28px 20px; text-align: center; background: linear-gradient(135deg, #1565c0, #2e7d32); }
+  header h1 { margin: 0; font-size: 2rem; }
+  header p { margin: 6px 0 0; opacity: .9; }
+  main { max-width: 640px; margin: 32px auto; padding: 0 16px; }
+  .card { background: #1e293b; border-radius: 14px; padding: 24px; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+  label { display: block; margin: 12px 0 6px; font-weight: 600; font-size: .95rem; }
+  input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; font-size: 1rem; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  button { margin-top: 18px; width: 100%; padding: 12px; border: 0; border-radius: 8px; background: #22c55e; color: #052e16; font-weight: 700; font-size: 1rem; cursor: pointer; }
+  button:hover { background: #16a34a; }
+  #output { display: none; }
+  #output h2 { margin-top: 0; color: #4ade80; }
+  #output p { margin: 6px 0; }
+  ul { padding-left: 18px; margin: 0; }
+  footer { text-align: center; font-size: .85rem; opacity: .6; padding: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🚗 AutoPulse</h1>
+  <p>Big Data analytics for the used car market — MVP</p>
+</header>
+<main>
+  <form class="card" id="carForm">
+    <label for="make">Make & model</label>
+    <input id="make" required placeholder="e.g. Toyota Camry">
+    <div class="row">
+      <div><label for="year">Year</label><input id="year" type="number" min="1950" max="2030" required placeholder="2018"></div>
+      <div><label for="mileage">Mileage (km)</label><input id="mileage" type="number" min="0" required placeholder="85000"></div>
+    </div>
+    <label for="price">Asking price (USD)</label>
+    <input id="price" type="number" min="0" required placeholder="17500">
+    <button type="submit">Check this car</button>
+  </form>
+
+  <div class="card" id="output">
+    <h2>You entered:</h2>
+    <p id="echo"></p>
+    <p style="opacity:.7;font-size:.9rem">Fair-price estimate and deal score will be added in the next milestone.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Your recent checks</h3>
+    <ul id="history"><li style="opacity:.6">Nothing yet</li></ul>
+  </div>
+</main>
+<footer>AutoPulse · Applications of Software Architecture for Big Data · Course project MVP</footer>
+
+<script>
+  const form = document.getElementById('carForm');
+  const out = document.getElementById('output');
+  const echo = document.getElementById('echo');
+  const hist = document.getElementById('history');
+  const items = [];
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const make = document.getElementById('make').value.trim();
+    const year = document.getElementById('year').value;
+    const km = Number(document.getElementById('mileage').value).toLocaleString('en-US');
+    const price = Number(document.getElementById('price').value).toLocaleString('en-US');
+    const text = `${make}, ${year}, ${km} km — $${price}`;
+    echo.textContent = text;
+    out.style.display = 'block';
+    items.unshift(text);
+    hist.innerHTML = '';
+    items.slice(0, 5).forEach(t => { const li = document.createElement('li'); li.textContent = t; hist.appendChild(li); });
+  });
+</script>
+</body>
+</html>
